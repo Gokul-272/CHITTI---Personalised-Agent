@@ -42,7 +42,6 @@ htmlcov/
 .coverage.*
 
 # Qdrant Vector DB & Persistent Storage
-qdrant_data/
 qdrant_storage/
 long_term_memory.json
 scripts/migration_backups/
