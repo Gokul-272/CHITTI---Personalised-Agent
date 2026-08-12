@@ -48,7 +48,6 @@ def build_collection(chunks):
         collection_name=COLLECTION_NAME,
         vectors_config=qmodels.VectorParams(size=vector_size, distance=qmodels.Distance.COSINE),
     )
-
     texts = [c[0] for c in chunks]
     metadatas = [c[1] for c in chunks]
     vectors = embedder.encode(texts, show_progress_bar=False).tolist()
@@ -59,7 +58,6 @@ def build_collection(chunks):
     ]
     client.upsert(collection_name=COLLECTION_NAME, points=points)
     return len(points)
-
 
 def collection_ready():
     """True if the knowledge base has already been built (used by the Streamlit sidebar)."""
