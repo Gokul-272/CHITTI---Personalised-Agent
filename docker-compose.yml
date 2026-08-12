@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: chitti_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-chitti}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chitti}
+      POSTGRES_DB: ${POSTGRES_DB:-chitti_fleet}
+    ports:
+      - "5433:5432"
+    volumes:
+      - chitti_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-chitti} -d ${POSTGRES_DB:-chitti_fleet}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  chitti_pgdata:
