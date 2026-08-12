@@ -3,3 +3,7 @@ Date,Suit,Component,Issue,Resolution,Technician
 2024-02-03,CHITTI Prototype 1,Servo joint 4,Minor thermal drift after 4-hour continuous sorting run,Applied heat sink pad and updated thermal throttling firmware,Gokul
 2024-02-20,CHITTI AI Engine,Qdrant vector index,Index latency spike of 4ms above 10ms spec,Optimized HNSW payload storage and increased thread pool,CHITTI Self-Diagnostic
 2024-03-02,Drone Inspector Unit 2,LIDAR sensor array,Optical noise flagged during night scan exercise,Cleaned lens housing and updated firmware noise filter,Gokul
+2024-03-15,Mark 42,Flight thruster,High-temperature alarm during rapid ascent test,Flushed coolant lines and replaced thermal coupling seal,Gokul
+2024-03-22,Mark 45,Repulsor coil,Pulse jitter observed during Operation Thunderstrike deployment,Recalibrated phase array and updated repulsor firmware,CHITTI Automated Diagnostics
+2024-03-28,Perimeter Shield Alpha,Protocol 17 Force Field,Acoustic dampener frequency drift of 0.2 kHz,Re-aligned transducer nodes and verified emergency lockdown speed,Gokul
+

@@ -1,85 +1,93 @@
 """
-src/db/seed_data.py - deterministic, hand-authored seed rows for the operations DB.
+src/db/seed_data.py - deterministic, personalized seed rows for Gokul & CHITTI operations DB.
 """
 
 EQUIPMENT = [
-    {"mark_name": "Mark 42", "status": "needs_maintenance", "power_core_pct": 84, "last_diagnostic_date": "2024-03-11"},
-    {"mark_name": "Mark 45", "status": "combat_ready", "power_core_pct": 97, "last_diagnostic_date": "2024-03-19"},
-    {"mark_name": "Mark 50", "status": "combat_ready", "power_core_pct": 99, "last_diagnostic_date": "2024-03-20"},
-    {"mark_name": "War Machine", "status": "combat_ready", "power_core_pct": 91, "last_diagnostic_date": "2024-03-18"},
-    {"mark_name": "Rescue", "status": "in_storage", "power_core_pct": 88, "last_diagnostic_date": "2024-02-01"},
-    {"mark_name": "Mark 7", "status": "decommissioned", "power_core_pct": 0, "last_diagnostic_date": "2012-05-04"},
+    {"mark_name": "CHITTI Mark 1", "status": "combat_ready", "power_core_pct": 98, "last_diagnostic_date": "2024-03-28"},
+    {"mark_name": "CHITTI Mark 2", "status": "needs_maintenance", "power_core_pct": 84, "last_diagnostic_date": "2024-03-25"},
+    {"mark_name": "Autonomous Mobile Robot AMR-1", "status": "combat_ready", "power_core_pct": 94, "last_diagnostic_date": "2024-03-20"},
+    {"mark_name": "Drone Inspector Unit 2", "status": "combat_ready", "power_core_pct": 91, "last_diagnostic_date": "2024-03-22"},
+    {"mark_name": "CNC Sensor-Fusion Array 1", "status": "combat_ready", "power_core_pct": 99, "last_diagnostic_date": "2024-03-29"},
+    {"mark_name": "Perimeter Shield Alpha", "status": "in_storage", "power_core_pct": 90, "last_diagnostic_date": "2024-02-15"},
+    {"mark_name": "CHITTI Prototype 0", "status": "decommissioned", "power_core_pct": 0, "last_diagnostic_date": "2023-08-10"},
 ]
 
 TEAM_MEMBERS = [
-    {"name": "Gokul", "specialty": "Robotics & AI", "years_experience": 5},
-    {"name": "CHITTI Automated Diagnostics", "specialty": "Software & Diagnostics", "years_experience": 1},
-    {"name": "Happy Hogan", "specialty": "Structural", "years_experience": 8},
-    {"name": "Tony Stark", "specialty": "Propulsion", "years_experience": 20},
-    {"name": "Priya Anand", "specialty": "Avionics", "years_experience": 6},
-    {"name": "Dmitri Kovalenko", "specialty": "Power Systems", "years_experience": 11},
-    {"name": "Sam Wilkins", "specialty": "Structural", "years_experience": 4},
-    {"name": "Sanjay", "specialty": "Intelligence", "years_experience": 8},
+    {"name": "Gokul", "specialty": "Robotics & AI Lead", "years_experience": 5},
+    {"name": "CHITTI Automated Diagnostics", "specialty": "Neural Diagnostics & Self-Healing", "years_experience": 1},
+    {"name": "Priya Anand", "specialty": "Avionics & Sensor Fusion", "years_experience": 6},
+    {"name": "Karthik Raja", "specialty": "Embedded Firmware & Motor Control", "years_experience": 4},
+    {"name": "Ananya Ramesh", "specialty": "Computer Vision & SLAM Navigation", "years_experience": 5},
+    {"name": "Deepak V", "specialty": "Power Systems & Battery Management", "years_experience": 7},
+    {"name": "Kavitha S", "specialty": "Cloud Infrastructure & Vector DB", "years_experience": 6},
+    {"name": "Sanjay", "specialty": "Tactical Intelligence & Operations", "years_experience": 8},
 ]
 
 MAINTENANCE_EVENTS = [
-    {"equipment": "Mark 42", "team_member": "Happy Hogan", "event_date": "2023-12-01", "component": "Left boot thruster", "issue": "Intermittent fault under cold conditions", "resolution": "Replaced thruster coil and resealed housing", "resolution_hours": 4.5, "cost_usd": 2200},
-    {"equipment": "Mark 42", "team_member": "Happy Hogan", "event_date": "2024-01-14", "component": "Left boot thruster", "issue": "Repeat intermittent fault after coil replacement", "resolution": "Escalated to full thruster housing replacement", "resolution_hours": 9, "cost_usd": 6800},
-    {"equipment": "Mark 42", "team_member": "Happy Hogan", "event_date": "2024-03-02", "component": "Left boot thruster", "issue": "Fault flagged a third time under sustained cold exposure", "resolution": "Replaced with redesigned cold-rated coil assembly", "resolution_hours": 6, "cost_usd": 4100},
-    {"equipment": "Mark 42", "team_member": "Priya Anand", "event_date": "2024-02-10", "component": "HUD display", "issue": "Minor glare artifact in direct sunlight", "resolution": "Recalibrated display polarization filter", "resolution_hours": 1.5, "cost_usd": 300},
-    {"equipment": "Mark 42", "team_member": "Dmitri Kovalenko", "event_date": "2024-01-22", "component": "Power core regulator", "issue": "Output dipped 4% below nominal for under a minute", "resolution": "Replaced regulator fuse, retested to spec", "resolution_hours": 2, "cost_usd": 900},
-    {"equipment": "Mark 42", "team_member": "Happy Hogan", "event_date": "2024-03-11", "component": "Right boot thruster", "issue": "New fault reported on right side for the first time", "resolution": "Replaced right thruster coil preemptively", "resolution_hours": 4, "cost_usd": 2100},
-    {"equipment": "Mark 42", "team_member": "Happy Hogan", "event_date": "2024-02-07", "component": "Left gauntlet plating", "issue": "Minor wear from training exercise", "resolution": "Buffed and resealed plating", "resolution_hours": 1, "cost_usd": 150},
-    {"equipment": "Mark 42", "team_member": "Tony Stark", "event_date": "2024-01-20", "component": "Repulsor coil", "issue": "Output 3% below spec on diagnostic sweep", "resolution": "Recalibrated repulsor coil alignment", "resolution_hours": 2, "cost_usd": 500},
-    {"equipment": "Mark 45", "team_member": "Tony Stark", "event_date": "2024-02-03", "component": "Chestplate servo", "issue": "Minor calibration drift after a high-G maneuver", "resolution": "Recalibrated via the diagnostic dock", "resolution_hours": 1, "cost_usd": 150},
-    {"equipment": "Mark 45", "team_member": "Tony Stark", "event_date": "2024-03-19", "component": "Power regulation circuit", "issue": "Output fluctuation of plus or minus 2 percent under sustained load", "resolution": "Replaced the regulation circuit board", "resolution_hours": 3, "cost_usd": 2400},
-    {"equipment": "Mark 45", "team_member": "Sam Wilkins", "event_date": "2023-12-15", "component": "Left gauntlet plating", "issue": "Hairline stress fracture after impact", "resolution": "Replaced plating section", "resolution_hours": 2.5, "cost_usd": 700},
-    {"equipment": "Mark 45", "team_member": "Happy Hogan", "event_date": "2024-03-05", "component": "Chestplate servo", "issue": "Servo grinding noise reported by pilot", "resolution": "Lubricated and retested servo assembly", "resolution_hours": 1, "cost_usd": 180},
-    {"equipment": "Mark 45", "team_member": "Sam Wilkins", "event_date": "2024-01-16", "component": "Chestplate integrity", "issue": "Minor scoring from debris impact", "resolution": "Buffed and resealed chestplate coating", "resolution_hours": 1.5, "cost_usd": 300},
-    {"equipment": "Mark 45", "team_member": "Dmitri Kovalenko", "event_date": "2024-03-15", "component": "Power core regulator", "issue": "Preventive inspection ahead of scheduled mission", "resolution": "No repair needed - logged as passed diagnostic", "resolution_hours": 1, "cost_usd": 0},
-    {"equipment": "Mark 50", "team_member": "CHITTI Automated Diagnostics", "event_date": "2024-02-20", "component": "Nanotech reassembly matrix", "issue": "Reassembly lag of 0.4 seconds above spec", "resolution": "Applied firmware patch; lag reduced to 0.1 seconds", "resolution_hours": 0.5, "cost_usd": 0},
-    {"equipment": "Mark 50", "team_member": "Dmitri Kovalenko", "event_date": "2024-01-05", "component": "Repulsor coil", "issue": "Thermal throttling triggered below spec threshold", "resolution": "Replaced coolant line, retested under load", "resolution_hours": 3, "cost_usd": 1800},
-    {"equipment": "Mark 50", "team_member": "Priya Anand", "event_date": "2023-12-28", "component": "Targeting HUD", "issue": "Lock time drift of 0.1 seconds above spec", "resolution": "Recalibrated sensor array", "resolution_hours": 1, "cost_usd": 200},
-    {"equipment": "Mark 50", "team_member": "Sam Wilkins", "event_date": "2024-02-14", "component": "Left boot thruster", "issue": "Minor efficiency loss reported", "resolution": "Cleaned thruster intake, retested to spec", "resolution_hours": 2, "cost_usd": 400},
-    {"equipment": "Mark 50", "team_member": "Tony Stark", "event_date": "2024-02-28", "component": "Nanotech reassembly matrix", "issue": "Routine firmware audit", "resolution": "Updated firmware to latest validated build", "resolution_hours": 1, "cost_usd": 0},
-    {"equipment": "Mark 50", "team_member": "Priya Anand", "event_date": "2024-03-20", "component": "Power core regulator", "issue": "Routine post-mission inspection", "resolution": "No repair needed - logged as passed diagnostic", "resolution_hours": 0.5, "cost_usd": 0},
-    {"equipment": "War Machine", "team_member": "Happy Hogan", "event_date": "2024-01-30", "component": "Minigun mount", "issue": "Mount vibration exceeding tolerance during sustained fire", "resolution": "Reinforced mount bracket", "resolution_hours": 5, "cost_usd": 3100},
-    {"equipment": "War Machine", "team_member": "Sam Wilkins", "event_date": "2023-11-18", "component": "Left leg actuator", "issue": "Actuator response delay under heavy load", "resolution": "Replaced actuator servo", "resolution_hours": 4, "cost_usd": 2600},
-    {"equipment": "War Machine", "team_member": "Tony Stark", "event_date": "2024-02-25", "component": "Power core regulator", "issue": "Output spike during weapons discharge", "resolution": "Installed surge dampener", "resolution_hours": 3.5, "cost_usd": 2900},
-    {"equipment": "War Machine", "team_member": "Priya Anand", "event_date": "2024-01-27", "component": "Comms array", "issue": "Static interference on priority channel", "resolution": "Replaced comms antenna array", "resolution_hours": 2.5, "cost_usd": 1200},
-    {"equipment": "War Machine", "team_member": "Priya Anand", "event_date": "2023-11-30", "component": "HUD display", "issue": "Refresh rate below spec under G-load", "resolution": "Replaced HUD driver board", "resolution_hours": 2, "cost_usd": 950},
-    {"equipment": "War Machine", "team_member": "Sam Wilkins", "event_date": "2023-12-08", "component": "Flight stabilizer", "issue": "Drift during high-speed maneuvering", "resolution": "Recalibrated stabilizer gyroscope", "resolution_hours": 1.5, "cost_usd": 300},
-    {"equipment": "Rescue", "team_member": "Priya Anand", "event_date": "2023-11-05", "component": "Flight stabilizer", "issue": "Minor drift during hover mode", "resolution": "Recalibrated stabilizer gyroscope", "resolution_hours": 1, "cost_usd": 250},
-    {"equipment": "Rescue", "team_member": "Dmitri Kovalenko", "event_date": "2024-01-08", "component": "Power core", "issue": "Routine capacity check, no fault found", "resolution": "No repair needed - logged as passed diagnostic", "resolution_hours": 0.5, "cost_usd": 0},
-    {"equipment": "Rescue", "team_member": "Dmitri Kovalenko", "event_date": "2023-12-20", "component": "Arc Reactor (chest unit, current)", "issue": "Output ceiling test", "resolution": "No repair needed - logged as passed diagnostic", "resolution_hours": 0.5, "cost_usd": 0},
-    {"equipment": "Mark 7", "team_member": "Tony Stark", "event_date": "2012-05-04", "component": "Full frame", "issue": "Total structural failure during the Battle of New York", "resolution": "Suit decommissioned, not repaired", "resolution_hours": 0, "cost_usd": 0},
+    # CHITTI Mark 2 maintenance
+    {"equipment": "CHITTI Mark 2", "team_member": "Karthik Raja", "event_date": "2023-12-01", "component": "Servo joint 4", "issue": "Minor thermal drift after 4-hour continuous sorting run", "resolution": "Applied heat sink pad and updated thermal throttling firmware", "resolution_hours": 3.5, "cost_usd": 1200},
+    {"equipment": "CHITTI Mark 2", "team_member": "Deepak V", "event_date": "2024-01-14", "component": "Power core regulator", "issue": "Voltage spike under peak motor acceleration", "resolution": "Replaced power regulation circuit and recalibrated fuse", "resolution_hours": 5.0, "cost_usd": 2800},
+    {"equipment": "CHITTI Mark 2", "team_member": "Karthik Raja", "event_date": "2024-03-02", "component": "Left arm actuator", "issue": "Repulsor phase synchronization delay during heavy load test", "resolution": "Replaced actuator coil assembly with cold-rated unit", "resolution_hours": 6.0, "cost_usd": 3500},
+    {"equipment": "CHITTI Mark 2", "team_member": "Priya Anand", "event_date": "2024-02-10", "component": "HUD display & Vision Unit", "issue": "Optical reflection artifact under direct sunlight", "resolution": "Recalibrated polarized camera filter and updated shader firmware", "resolution_hours": 1.5, "cost_usd": 300},
+    {"equipment": "CHITTI Mark 2", "team_member": "Deepak V", "event_date": "2024-01-22", "component": "Battery management matrix", "issue": "Cell charge imbalance flagged during routine diagnostic", "resolution": "Rebalanced cell array and updated BMS balancing algorithm", "resolution_hours": 2.0, "cost_usd": 600},
+    {"equipment": "CHITTI Mark 2", "team_member": "Karthik Raja", "event_date": "2024-03-25", "component": "Right boot thruster", "issue": "Vibration harmonic detected during flight hover test", "resolution": "Replaced thruster intake coupling and rebalanced rotor", "resolution_hours": 4.0, "cost_usd": 2100},
+
+    # CHITTI Mark 1 maintenance
+    {"equipment": "CHITTI Mark 1", "team_member": "Gokul", "event_date": "2024-02-03", "component": "Neural voice processor", "issue": "Audio buffer overrun during high-speed speech synthesis", "resolution": "Optimized memory allocation buffer in C++ backend", "resolution_hours": 1.0, "cost_usd": 0},
+    {"equipment": "CHITTI Mark 1", "team_member": "Deepak V", "event_date": "2024-03-19", "component": "Arc power core", "issue": "Output fluctuation of ±1.5% under sustained combat load", "resolution": "Replaced primary plasma dampeners", "resolution_hours": 3.0, "cost_usd": 2400},
+    {"equipment": "CHITTI Mark 1", "team_member": "Ananya Ramesh", "event_date": "2023-12-15", "component": "LIDAR vision sensor", "issue": "Minor lens abrasion after dusty field trial", "resolution": "Replaced protective sapphire glass lens", "resolution_hours": 2.0, "cost_usd": 500},
+    {"equipment": "CHITTI Mark 1", "team_member": "CHITTI Automated Diagnostics", "event_date": "2024-03-28", "component": "Qdrant vector memory link", "issue": "Search latency spike of 3ms during dense retrieval", "resolution": "Re-indexed HNSW payload storage and optimized payload filter", "resolution_hours": 0.5, "cost_usd": 0},
+
+    # Autonomous Mobile Robot AMR-1 maintenance
+    {"equipment": "Autonomous Mobile Robot AMR-1", "team_member": "Gokul", "event_date": "2024-01-14", "component": "Left drive motor", "issue": "Intermittent slip under heavy industrial load", "resolution": "Replaced optical encoder and recalibrated motor controller", "resolution_hours": 4.0, "cost_usd": 1100},
+    {"equipment": "Autonomous Mobile Robot AMR-1", "team_member": "Ananya Ramesh", "event_date": "2024-02-20", "component": "ROS2 SLAM navigation unit", "issue": "Drift in map localization during heavy warehouse interference", "resolution": "Updated ROS2 EKF node parameters and re-mapped facility", "resolution_hours": 2.5, "cost_usd": 400},
+
+    # Drone Inspector Unit 2 maintenance
+    {"equipment": "Drone Inspector Unit 2", "team_member": "Gokul", "event_date": "2024-03-02", "component": "LIDAR sensor array", "issue": "Optical noise flagged during night scan exercise", "resolution": "Cleaned lens housing and updated firmware noise filter", "resolution_hours": 1.5, "cost_usd": 250},
+    {"equipment": "Drone Inspector Unit 2", "team_member": "Priya Anand", "event_date": "2024-03-22", "component": "Telemetry transmitter", "issue": "Packet drop observed during Operation Thunderstrike deployment", "resolution": "Re-aligned directional antenna array and updated RF modulation", "resolution_hours": 2.0, "cost_usd": 450},
+
+    # CNC Sensor-Fusion Array 1 maintenance
+    {"equipment": "CNC Sensor-Fusion Array 1", "team_member": "Kavitha S", "event_date": "2024-02-15", "component": "Vibration sensor node 4", "issue": "Calibration drift on high-speed CNC spindle sensor", "resolution": "Recalibrated piezo sensor node and validated fast FFT analysis", "resolution_hours": 1.0, "cost_usd": 200},
+
+    # Perimeter Shield Alpha maintenance
+    {"equipment": "Perimeter Shield Alpha", "team_member": "Gokul", "event_date": "2024-03-28", "component": "Protocol 17 force field transducer", "issue": "Acoustic dampener frequency drift of 0.2 kHz during Protocol 17 test", "resolution": "Re-aligned transducer nodes and verified emergency lockdown speed", "resolution_hours": 3.0, "cost_usd": 1500},
+
+    # CHITTI Prototype 0 maintenance
+    {"equipment": "CHITTI Prototype 0", "team_member": "Gokul", "event_date": "2023-08-10", "component": "Full frame & chassis", "issue": "Retired prototype frame replaced by CHITTI Mark 1", "resolution": "Unit decommissioned and transferred to research archive", "resolution_hours": 0.0, "cost_usd": 0},
 ]
 
 OPERATIONS = [
-    {"equipment": "Mark 42", "operation_date": "2024-01-05", "location": "Malibu Coastline", "threat_level": 4, "duration_min": 38, "outcome": "success"},
-    {"equipment": "Mark 42", "operation_date": "2024-02-18", "location": "Downtown LA", "threat_level": 3, "duration_min": 22, "outcome": "success"},
-    {"equipment": "Mark 42", "operation_date": "2024-03-01", "location": "Pacific Test Range", "threat_level": 2, "duration_min": 15, "outcome": "success"},
-    {"equipment": "Mark 42", "operation_date": "2023-12-12", "location": "Nevada Desert Range", "threat_level": 2, "duration_min": 14, "outcome": "success"},
-    {"equipment": "Mark 45", "operation_date": "2024-01-20", "location": "New York City", "threat_level": 5, "duration_min": 54, "outcome": "success"},
-    {"equipment": "Mark 45", "operation_date": "2024-02-05", "location": "Extremis Containment Site", "threat_level": 5, "duration_min": 61, "outcome": "partial"},
-    {"equipment": "Mark 45", "operation_date": "2024-03-10", "location": "Stark Industries Perimeter", "threat_level": 2, "duration_min": 12, "outcome": "success"},
-    {"equipment": "Mark 45", "operation_date": "2024-02-27", "location": "Miami Coastal Patrol", "threat_level": 3, "duration_min": 19, "outcome": "success"},
-    {"equipment": "Mark 50", "operation_date": "2024-01-12", "location": "Wakanda Border", "threat_level": 5, "duration_min": 47, "outcome": "success"},
-    {"equipment": "Mark 50", "operation_date": "2024-02-22", "location": "Sokovia Airspace", "threat_level": 5, "duration_min": 58, "outcome": "success"},
-    {"equipment": "Mark 50", "operation_date": "2024-03-05", "location": "Siberian Facility", "threat_level": 4, "duration_min": 33, "outcome": "success"},
-    {"equipment": "Mark 50", "operation_date": "2023-12-30", "location": "Test Flight Corridor", "threat_level": 1, "duration_min": 8, "outcome": "success"},
-    {"equipment": "Mark 50", "operation_date": "2024-01-15", "location": "Arctic Research Station", "threat_level": 4, "duration_min": 36, "outcome": "aborted"},
-    {"equipment": "War Machine", "operation_date": "2024-01-08", "location": "Wakanda Border", "threat_level": 5, "duration_min": 49, "outcome": "success"},
-    {"equipment": "War Machine", "operation_date": "2024-02-14", "location": "Lagos", "threat_level": 4, "duration_min": 30, "outcome": "partial"},
-    {"equipment": "War Machine", "operation_date": "2024-03-18", "location": "USAF Joint Exercise", "threat_level": 2, "duration_min": 20, "outcome": "success"},
-    {"equipment": "War Machine", "operation_date": "2024-03-22", "location": "Joint NATO Exercise", "threat_level": 3, "duration_min": 28, "outcome": "success"},
-    {"equipment": "Rescue", "operation_date": "2023-11-10", "location": "Malibu Cliffside Recovery", "threat_level": 3, "duration_min": 25, "outcome": "success"},
-    {"equipment": "Rescue", "operation_date": "2024-01-25", "location": "Stark Expo Backup", "threat_level": 1, "duration_min": 10, "outcome": "success"},
-    {"equipment": "Rescue", "operation_date": "2024-02-01", "location": "Stark Tower Perimeter Drill", "threat_level": 1, "duration_min": 9, "outcome": "success"},
+    # CHITTI Mark 1 Operations
+    {"equipment": "CHITTI Mark 1", "operation_date": "2024-01-05", "location": "Coimbatore Research Lab", "threat_level": 2, "duration_min": 45, "outcome": "success"},
+    {"equipment": "CHITTI Mark 1", "operation_date": "2024-02-18", "location": "Chennai Innovation Hub", "threat_level": 3, "duration_min": 60, "outcome": "success"},
+    {"equipment": "CHITTI Mark 1", "operation_date": "2024-03-22", "location": "Bay of Bengal (Operation Thunderstrike)", "threat_level": 5, "duration_min": 42, "outcome": "success"},
+    {"equipment": "CHITTI Mark 1", "operation_date": "2024-03-28", "location": "Coimbatore Stealth AI Facility (Protocol 17 Lockdown)", "threat_level": 4, "duration_min": 30, "outcome": "success"},
+
+    # CHITTI Mark 2 Operations
+    {"equipment": "CHITTI Mark 2", "operation_date": "2024-01-20", "location": "Chennai Port Facility", "threat_level": 4, "duration_min": 54, "outcome": "success"},
+    {"equipment": "CHITTI Mark 2", "operation_date": "2024-02-05", "location": "Extremis Containment Site (Chennai Port)", "threat_level": 5, "duration_min": 61, "outcome": "partial"},
+    {"equipment": "CHITTI Mark 2", "operation_date": "2024-03-10", "location": "Coimbatore Tech Park", "threat_level": 2, "duration_min": 25, "outcome": "success"},
+
+    # Autonomous Mobile Robot AMR-1 Operations
+    {"equipment": "Autonomous Mobile Robot AMR-1", "operation_date": "2024-01-14", "location": "Chennai Logistics Warehouse", "threat_level": 1, "duration_min": 480, "outcome": "success"},
+    {"equipment": "Autonomous Mobile Robot AMR-1", "operation_date": "2024-02-28", "location": "Salem Industrial Facility", "threat_level": 1, "duration_min": 360, "outcome": "success"},
+
+    # Drone Inspector Unit 2 Operations
+    {"equipment": "Drone Inspector Unit 2", "operation_date": "2024-01-08", "location": "Nilgiris Frontier Zone (Leo Rescue)", "threat_level": 3, "duration_min": 40, "outcome": "success"},
+    {"equipment": "Drone Inspector Unit 2", "operation_date": "2024-03-02", "location": "Nevada Desert Test Range", "threat_level": 2, "duration_min": 35, "outcome": "success"},
+    {"equipment": "Drone Inspector Unit 2", "operation_date": "2024-03-22", "location": "Bay of Bengal (Operation Thunderstrike)", "threat_level": 5, "duration_min": 42, "outcome": "success"},
+
+    # CNC Sensor-Fusion Array 1 Operations
+    {"equipment": "CNC Sensor-Fusion Array 1", "operation_date": "2024-02-15", "location": "Coimbatore CNC Manufacturing Facility", "threat_level": 1, "duration_min": 720, "outcome": "success"},
+
+    # Perimeter Shield Alpha Operations
+    {"equipment": "Perimeter Shield Alpha", "operation_date": "2024-03-28", "location": "Coimbatore Stealth AI Facility", "threat_level": 4, "duration_min": 15, "outcome": "success"},
 ]
 
 INTEL_REPORTS = [
-    {"codename": "Vaathi Coming", "status": "active", "threat_level": 4, "summary": "Heavy deployment of forces detected at the northern frontier. High tactical vigilance recommended.", "report_date": "2024-03-25"},
-    {"codename": "Mastermind", "status": "completed", "threat_level": 5, "summary": "Strategic operation at the port completed successfully. Enemy supply line disabled.", "report_date": "2024-02-15"},
-    {"codename": "Leo Rescue", "status": "classified", "threat_level": 3, "summary": "Extraction of key assets completed successfully during high wind conditions.", "report_date": "2024-01-10"},
+    {"codename": "Operation Thunderstrike", "status": "completed", "threat_level": 5, "summary": "Joint tactical drone swarm interception over the Bay of Bengal executed by Gokul, CHITTI Mark 1, and Drone Inspector Unit 2. Intercepted 120 hostile aerial targets in 42 minutes with zero impact to commercial shipping.", "report_date": "2024-03-22"},
+    {"codename": "Protocol 17 Security Drill", "status": "active", "threat_level": 4, "summary": "Perimeter force field and emergency containment lockdown verified across all sectors of the Coimbatore Stealth AI Lab. Force field transducer nodes and acoustic dampeners responded within 2.8 seconds.", "report_date": "2024-03-28"},
+    {"codename": "Vaathi Coming", "status": "active", "threat_level": 4, "summary": "Heavy deployment of tactical sensor nodes detected at the northern frontier. High vigilance and automated sensor-fusion relays maintained by Gokul's team.", "report_date": "2024-03-25"},
+    {"codename": "Mastermind", "status": "completed", "threat_level": 5, "summary": "Strategic logistics & port security audit at Chennai Port completed successfully. Predictive maintenance sensors disabled unauthorized supply disruptions.", "report_date": "2024-02-15"},
+    {"codename": "Leo Rescue", "status": "classified", "threat_level": 3, "summary": "Extraction of key research assets in the Nilgiris high-altitude zone completed under severe wind conditions using Drone Inspector Unit 2.", "report_date": "2024-01-10"},
 ]
