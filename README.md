@@ -3,7 +3,6 @@
 > A production-grade reference AI assistant combining **Vector Retrieval (RAG)** over multi-format documents, a **Natural-Language-to-SQL (NL2SQL)** pipeline over a relational PostgreSQL database, and an **Agentic ReAct (Thought → Action → Observation)** loop — built for Gokul ("Boss").
 
 Runs locally or cloud-accelerated — **Groq** (`llama-3.1-8b-instant`) or **Ollama** (`llama3.1:8b`) for LLM inference, **Qdrant (embedded)** for vector storage, **`sentence-transformers/all-MiniLM-L6-v2`** for embeddings, and **PostgreSQL (via Docker)** for structured operations data.
-
 ---
 
 ## 📋 Table of Contents
