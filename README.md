@@ -37,8 +37,13 @@ Runs locally or cloud-accelerated — **Groq** (`llama-3.1-8b-instant`) or **Oll
 | **Project Name** | **CHITTI** (Enthiran / Rajini-class AI Personal Assistant Robot v1.0) |
 | **Primary User ("Boss")** | **Gokul** — Robotics Systems Engineer & AI Product Builder |
 | **GitHub Repository** | [Gokul-272/CHITTI---Personalised-Agent](https://github.com/Gokul-272/CHITTI---Personalised-Agent) |
+<<<<<<< HEAD
 | **Mission Objective** | Personal assistant task management, calendar schedule tracking, contact dossier management, expense analytics, idea/note retrieval, and autonomous workflow assistance. |
 | **Multi-Format Chunking** | Multi-format chunking pipeline for personal-assistant docs: `markdown_header` for profile, coding, education, work-style, and relationship notes, plus `jsonl_record` for `memories.jsonl`. |
+=======
+| **Mission Objective** | Personal AI Assistance. |
+| **Multi-Format Chunking** | Multi-format chunking pipeline: `markdown_header` for `mission_briefings.md`, `json_record` for `personnel_dossiers.json`, `csv_row` for `operation_logs.csv`, and `html_section` for `command_protocols.html`. |
+>>>>>>> 89793f9d1cb6f64b075c14189908b23b3cded944
 | **Vector Database** | Embedded **Qdrant** (`./qdrant_data`) with HNSW indexing, Cosine similarity, and `sentence-transformers/all-MiniLM-L6-v2` embeddings (Collection: `chitti_kb`). |
 | **Retrieval Strategy** | `top_k=5` semantic retrieval with rich metadata injection (`doc_type`, `source`, `strategy`) and source-aware context formatting. |
 | **Generation Prompt** | Grounded prompt: *"Answer using ONLY the provided context or approved tools. If unavailable, respond: 'Boss, this information is not available in my database.'"* Delivered in CHITTI's respectful, energetic, and technically confident voice. |
