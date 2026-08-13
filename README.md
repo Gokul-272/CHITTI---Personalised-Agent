@@ -37,19 +37,19 @@ Runs locally or cloud-accelerated — **Groq** (`llama-3.1-8b-instant`) or **Oll
 | **Project Name** | **CHITTI** (Enthiran / Rajini-class AI Personal Assistant Robot v1.0) |
 | **Primary User ("Boss")** | **Gokul** — Robotics Systems Engineer & AI Product Builder |
 | **GitHub Repository** | [Gokul-272/CHITTI---Personalised-Agent](https://github.com/Gokul-272/CHITTI---Personalised-Agent) |
-| **Mission Objective** | Autonomous robotics system monitoring, equipment telemetry checks, mission briefing retrieval, personnel dossier management, maintenance scheduling, and operational fleet intelligence. |
-| **Multi-Format Chunking** | Multi-format chunking pipeline: `markdown_header` for `mission_briefings.md`, `json_record` for `personnel_dossiers.json`, `csv_row` for `operation_logs.csv`, and `html_section` for `command_protocols.html`. |
+| **Mission Objective** | Personal assistant task management, calendar schedule tracking, contact dossier management, expense analytics, idea/note retrieval, and autonomous workflow assistance. |
+| **Multi-Format Chunking** | Multi-format chunking pipeline for personal-assistant docs: `markdown_header` for profile, coding, education, work-style, and relationship notes, plus `jsonl_record` for `memories.jsonl`. |
 | **Vector Database** | Embedded **Qdrant** (`./qdrant_data`) with HNSW indexing, Cosine similarity, and `sentence-transformers/all-MiniLM-L6-v2` embeddings (Collection: `chitti_kb`). |
 | **Retrieval Strategy** | `top_k=5` semantic retrieval with rich metadata injection (`doc_type`, `source`, `strategy`) and source-aware context formatting. |
 | **Generation Prompt** | Grounded prompt: *"Answer using ONLY the provided context or approved tools. If unavailable, respond: 'Boss, this information is not available in my database.'"* Delivered in CHITTI's respectful, energetic, and technically confident voice. |
 | **LLM Inference Engine** | **Groq** (`llama-3.1-8b-instant`) as primary high-speed cloud engine with **Ollama** (`llama3.1:8b`) local fallback configured via `config/settings.py`. |
-| **Tool Registry (12 Tools)** | 12 registered tools (`query_operations_db`, `check_equipment_status`, `schedule_operation`, `remember_preference`, `check_suit_status`, `send_alert`, `schedule_reminder`, `lookup_knowledge_base`, `query_fleet_database`, `view_action_log`, `remember_fact`, `recall_fact`). |
+| **Tool Registry (15 Tools)** | Registered personal assistant tools (`query_personal_db`, `check_task_status`, `schedule_personal_event`, `remember_preference`, `send_alert`, `schedule_reminder`, `lookup_knowledge_base`, `view_action_log`, `remember_fact`, `recall_fact`, and backwards-compatible aliases). |
 | **Model Context Protocol (MCP)** | **No MCP Overhead** — Intentionally designed as a single-agent architecture using a lightweight `TOOL_REGISTRY` behind a decoupled FastAPI service boundary. |
 | **3-Tier Memory Architecture** | **Short-Term**: Sliding window per session (`ShortTermMemory`). **Episodic**: In-memory action logging (`ACTION_LOG`). **Long-Term**: Persistent JSON store (`long_term_memory.json`). |
 | **Agentic Planning Loop** | Custom ReAct planning loop parsing `Thought:`, `Action:`, `Action Input:`, and `Observation:` blocks, with full reasoning traces rendered in Streamlit UI & CLI. |
 | **System Architecture** | **3-Layer Architecture**: Presentation Layer (Streamlit UI + CLI) → FastAPI Service Layer → Core AI Layer (Vector RAG + NL2SQL PostgreSQL + LLM Engine + Agent Planner). |
-| **Action Confirmations** | Operational actions execute with explicit confirmation messages (e.g., *"Boss, operation scheduled successfully. Confirmation recorded and transmission complete."*) and record into episodic memory (`ACTION_LOG`). |
-| **Structured Relational DB** | **PostgreSQL** relational database with 5 operational tables (`equipment`, `team_members`, `maintenance_events`, `operations`, `intel_reports`), accessed via secure NL2SQL under a read-only role (`chitti_readonly`). |
+| **Action Confirmations** | Operational actions execute with explicit confirmation messages (e.g., *"Boss, event scheduled successfully. Confirmation recorded."*) and record into episodic memory (`ACTION_LOG`). |
+| **Structured Relational DB** | **PostgreSQL** relational database with 5 personal assistant tables (`tasks`, `schedule_events`, `contacts`, `expenses`, `personal_notes`), accessed via secure NL2SQL under a read-only role (`chitti_readonly`). |
 | **Status & Score** | **100 / 100 — Complete & Verified** (FastAPI, PostgreSQL, Qdrant, Groq/Ollama integration, RAG pipeline, NL2SQL, and agentic orchestration fully operational). |
 | **Operational Notes** | Supports dual-provider LLM execution (Groq primary + Ollama fallback), defense-in-depth SQL safety (regex guard + read-only DB role), and startup-time single-worker enforcement for deterministic in-memory session state. |
 
@@ -59,10 +59,11 @@ CHITTI answers complex queries by orchestrating **two independent retrieval subs
    - Ingests Markdown, JSON, CSV, and HTML documents from `data/documents/`.
    - Applied document-specific chunking strategies (header-aware, per-record, per-row, section-aware).
    - Embedded using `sentence-transformers/all-MiniLM-L6-v2` and stored locally in **Qdrant** embedded DB.
-2. **Structured Operations Database (Relational Data & NL2SQL)**:
-   - PostgreSQL schema containing `equipment`, `team_members`, `maintenance_events`, `operations`, and `intel_reports`.
+2. **Structured Personal Database (Relational Data & NL2SQL)**:
+   - PostgreSQL schema containing `tasks`, `schedule_events`, `contacts`, `expenses`, and `personal_notes`.
    - Answers exact metric queries (counts, sums, averages, multi-table joins) via a natural-language-to-SQL pipeline.
    - Dual-engine security: query generation → regex safety guard → execution under a **least-privilege read-only DB role (`chitti_readonly`)**.
+
 3. **Execution Modes**:
    - **RAG Mode**: Direct grounded retrieval from vector storage. CHITTI only answers questions based on retrieved knowledge without executing tools.
    - **Agentic Mode**: Full **ReAct (Reasoning & Acting)** loop. CHITTI autonomously selects from 12+ tools, executes multi-step plans, writes SQL queries, logs actions, and updates persistent memory.
@@ -110,10 +111,14 @@ File formats and content structures require distinct chunking strategies to avoi
 
 | File Name | Format | Ingestion Strategy | Rationale |
 |---|---|---|---|
-| `mission_briefings.md` | Markdown | Header-Aware (`## ` split) | Keeps mission objectives, outcomes, and lessons learned bound to the header title. |
-| `personnel_dossiers.json` | JSON | Per-Record (`json.load`) | Converts individual JSON objects into self-contained text chunks without losing fields. |
-| `operation_logs.csv` | CSV | Per-Row (`csv.DictReader`) | Binds every field value directly to its column headers for precise row retrieval. |
-| `command_protocols.html` | HTML | Per-Section (`<section>`) | Extracts `<section>` blocks and strips tags, leaving clean protocol text. |
+| `about_me.md` | Markdown | Header-Aware (`## ` split) | Keeps identity, location, language, and background together. |
+| `preferences.md` | Markdown | Header-Aware (`## ` split) | Keeps food, music, technology, and recommendation preferences together. |
+| `personality.md` | Markdown | Header-Aware (`## ` split) | Keeps thinking style, motivation, stressors, and challenge style together. |
+| `communication_style.md` | Markdown | Header-Aware (`## ` split) | Keeps answer length, tone, humor, and criticism preferences together. |
+| `relationships/important_people.md` | Markdown | Header-Aware (`## ` split) | Keeps privacy and relationship-handling rules together. |
+| `relationships/person_01.md` | Markdown | Header-Aware (`## ` split) | Template for an individual relationship note. |
+| `relationships/person_02.md` | Markdown | Header-Aware (`## ` split) | Template for a second individual relationship note. |
+| `memories.jsonl` | JSONL | Per-Line (`json.loads`) | Converts each memory entry into a self-contained chunk with category metadata. |
 
 Ingestion is executed via `scripts/ingest.py`, building/refreshing the local Qdrant vector index in `./qdrant_data`.
 
@@ -200,10 +205,22 @@ CHITTI/
 │   └── settings.py          # Centralized configuration (Pydantic Settings & environment variables)
 ├── data/
 │   └── documents/           # Multi-format document collection
-│       ├── command_protocols.html
-│       ├── mission_briefings.md
-│       ├── operation_logs.csv
-│       └── personnel_dossiers.json
+│       ├── about_me.md
+│       ├── coding_profile.md
+│       ├── communication_style.md
+│       ├── education_history.md
+│       ├── goals.md
+│       ├── learning_style.md
+│       ├── memories.jsonl
+│       ├── personality.md
+│       ├── preferences.md
+│       ├── projects_portfolio.md
+│       ├── qualities.md
+│       ├── work_style.md
+│       └── relationships/
+│           ├── important_people.md
+│           ├── person_01.md
+│           └── person_02.md
 ├── qdrant_data/             # Embedded Qdrant vector database storage directory
 ├── scripts/
 │   ├── ingest.py            # Document chunking, embedding, & Qdrant vector indexing
@@ -449,10 +466,14 @@ FastAPI runs on `http://localhost:8000`. Interactive documentation is available 
 ### RAG Mode Benchmarks
 | Query | Expected Subsystem | Purpose |
 |---|---|---|
-| *"What happened during the Extremis Threat Containment mission?"* | `mission_briefings.md` | Tests Markdown header-aware chunking. |
-| *"What is Pepper Potts' role and dossier summary?"* | `personnel_dossiers.json` | Tests JSON per-record parsing. |
-| *"What was the maintenance resolution for Mark 42's flight thruster on 2024-03-15?"* | `operation_logs.csv` | Tests CSV row-level parsing with headers. |
-| *"Walk me through the House Party protocol."* | `command_protocols.html` | Tests HTML section tag stripping. |
+| *"Summarize Boss's background and technical focus."* | `about_me.md` | Tests personal profile chunking. |
+| *"What is Boss's coding stack and code review style?"* | `coding_profile.md` | Tests coding-profile chunking. |
+| *"What is Boss's education background?"* | `education_history.md` | Tests education-history chunking. |
+| *"What food, music, and work preferences should I remember?"* | `preferences.md` | Tests preference chunking. |
+| *"How should the assistant challenge Boss when a plan is weak?"* | `personality.md` | Tests personality and correction-style chunking. |
+| *"What does the assistant remember from the sample memory log?"* | `memories.jsonl` | Tests JSONL line-by-line parsing for durable memory samples. |
+| *"How should Boss's workday and deep work blocks be protected?"* | `work_style.md` | Tests work-style chunking. |
+| *"What goals and project themes should the assistant keep in mind?"* | `goals.md` / `projects_portfolio.md` | Tests goals and project-history chunking. |
 
 ### Agentic Mode Benchmarks
 | Query | Expected Tool Chain | Purpose |

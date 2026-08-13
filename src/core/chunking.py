@@ -1,11 +1,10 @@
 """
 src/core/chunking.py - different chunking strategies for different CHITTI knowledge types.
 
-This directly demonstrates the course's Ingestion & Chunking lesson along two axes at
-once: content STRUCTURE differs (a joke vs. a procedure needs a different split), and
-file FORMAT differs (plain text, Markdown, JSON, CSV, and HTML each need their own
-parser before you can even think about chunking). Each function below returns a list of
-(text, metadata) chunks.
+This demonstrates the ingestion lesson along two axes at once: content STRUCTURE differs
+(a profile, a relationship note, and a memory entry should not be chunked the same way),
+and file FORMAT differs (Markdown and JSONL each need their own parser before chunking).
+Each function below returns a list of (text, metadata) chunks.
 """
 
 import csv
@@ -102,6 +101,30 @@ def chunk_by_json_record(filename, doc_type):
     return chunks
 
 
+def chunk_by_jsonl_record(filename, doc_type):
+    """Structured JSONL chunking - for memory entries.
+    Parses line-by-line so each memory stays atomic and easy to retrieve later."""
+    text = _read(filename)
+    chunks = []
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        line = line.strip()
+        if not line:
+            continue
+        record = json.loads(line)
+        memory_text = record.get("memory", "")
+        fields = "; ".join(
+            f"{key.replace('_', ' ').capitalize()}: {value}"
+            for key, value in record.items()
+            if key != "memory"
+        )
+        flat = memory_text if not fields else f"{memory_text} | {fields}"
+        metadata = {"doc_type": doc_type, "source": filename, "strategy": "jsonl_record", "line": line_number}
+        if "category" in record:
+            metadata["category"] = record["category"]
+        chunks.append((flat, metadata))
+    return chunks
+
+
 def chunk_by_csv_row(filename, doc_type):
     """Row-level CSV chunking - for the maintenance log.
     Parses with csv.DictReader (never naive line-splitting) so each value stays bound to
@@ -135,12 +158,23 @@ def chunk_by_html_section(filename, doc_type):
     return chunks
 
 
-# The actual ingestion plan: which file uses which strategy, matching the course's cheat sheet.
+# The actual ingestion plan: which file uses which strategy, matching the personal-assistant profile schema.
 INGESTION_PLAN = [
-    (chunk_by_markdown_header, "mission_briefings.md", "mission_briefings"),
-    (chunk_by_json_record, "personnel_dossiers.json", "personnel_dossiers"),
-    (chunk_by_csv_row, "operation_logs.csv", "operation_logs"),
-    (chunk_by_html_section, "command_protocols.html", "command_protocols"),
+    (chunk_by_markdown_header, "about_me.md", "about_me"),
+    (chunk_by_markdown_header, "coding_profile.md", "coding_profile"),
+    (chunk_by_markdown_header, "education_history.md", "education_history"),
+    (chunk_by_markdown_header, "preferences.md", "preferences"),
+    (chunk_by_markdown_header, "personality.md", "personality"),
+    (chunk_by_markdown_header, "communication_style.md", "communication_style"),
+    (chunk_by_markdown_header, "work_style.md", "work_style"),
+    (chunk_by_markdown_header, "qualities.md", "qualities"),
+    (chunk_by_markdown_header, "goals.md", "goals"),
+    (chunk_by_markdown_header, "learning_style.md", "learning_style"),
+    (chunk_by_markdown_header, "projects_portfolio.md", "projects_portfolio"),
+    (chunk_by_markdown_header, os.path.join("relationships", "important_people.md"), "important_people"),
+    (chunk_by_markdown_header, os.path.join("relationships", "person_01.md"), "person_01"),
+    (chunk_by_markdown_header, os.path.join("relationships", "person_02.md"), "person_02"),
+    (chunk_by_jsonl_record, "memories.jsonl", "memories"),
 ]
 
 

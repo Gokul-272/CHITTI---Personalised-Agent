@@ -10,11 +10,11 @@ from src.nl2sql.guard import UnsafeSQLError, validate_select_only
 
 
 def test_accepts_simple_select():
-    assert validate_select_only("SELECT * FROM equipment") == "SELECT * FROM equipment"
+    assert validate_select_only("SELECT * FROM tasks") == "SELECT * FROM tasks"
 
 
 def test_accepts_select_with_trailing_semicolon():
-    assert validate_select_only("SELECT * FROM equipment;") == "SELECT * FROM equipment"
+    assert validate_select_only("SELECT * FROM tasks;") == "SELECT * FROM tasks"
 
 
 def test_accepts_cte_with_select():
@@ -23,12 +23,12 @@ def test_accepts_cte_with_select():
 
 
 @pytest.mark.parametrize("sql", [
-    "DROP TABLE equipment",
-    "DELETE FROM equipment",
-    "UPDATE equipment SET status = 'combat_ready'",
-    "INSERT INTO equipment (mark_name) VALUES ('Mark 99')",
-    "ALTER TABLE equipment ADD COLUMN hacked text",
-    "GRANT ALL ON equipment TO public",
+    "DROP TABLE tasks",
+    "DELETE FROM tasks",
+    "UPDATE tasks SET status = 'completed'",
+    "INSERT INTO tasks (title) VALUES ('New Task')",
+    "ALTER TABLE tasks ADD COLUMN hacked text",
+    "GRANT ALL ON tasks TO public",
 ])
 def test_rejects_non_select_statements(sql):
     with pytest.raises(UnsafeSQLError):
@@ -37,7 +37,7 @@ def test_rejects_non_select_statements(sql):
 
 def test_rejects_stacked_statements():
     with pytest.raises(UnsafeSQLError):
-        validate_select_only("SELECT * FROM equipment; DROP TABLE equipment;")
+        validate_select_only("SELECT * FROM tasks; DROP TABLE tasks;")
 
 
 def test_rejects_empty_query():
@@ -48,5 +48,6 @@ def test_rejects_empty_query():
 def test_does_not_false_positive_on_column_names_containing_banned_substrings():
     # "updated_at" contains "update" but is not the UPDATE keyword - word-boundary
     # matching must not reject it.
-    sql = "SELECT updated_at FROM equipment"
+    sql = "SELECT updated_at FROM tasks"
     assert validate_select_only(sql) == sql
+

@@ -1,10 +1,8 @@
 """
-src/db/models.py - the structured fleet-ops schema: suits, technicians, maintenance
-events, and missions. This is the "structured data" counterpart to data/documents/ - the
-same real-world facts (suit maintenance, in maintenance_log.csv) sometimes belong in a
-proper relational DB instead of a document, because a question like "how many times has
-the Mark 42 needed thruster repairs" needs an exact COUNT, not an LLM eyeballing a handful
-of retrieved chunks. See src/nl2sql/ for how natural language reaches these tables.
+src/db/models.py - the structured Personal Assistant schema: tasks, schedule events,
+contacts, expenses, and personal notes. This is the "structured data" counterpart to
+data/documents/ for precise metrics (exact counts, priority filtering, sum of expenses,
+and date ranges) via the NL2SQL pipeline. See src/nl2sql/ for details.
 """
 
 from sqlalchemy import Column, Integer, String, Text, Numeric, Date, ForeignKey
@@ -13,67 +11,63 @@ from sqlalchemy.orm import declarative_base, relationship
 Base = declarative_base()
 
 
-class Equipment(Base):
-    __tablename__ = "equipment"
+class Task(Base):
+    __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True)
-    mark_name = Column(String, unique=True, nullable=False)
-    status = Column(String, nullable=False)  # combat_ready | needs_maintenance | in_storage | decommissioned
-    power_core_pct = Column(Numeric, nullable=False)
-    last_diagnostic_date = Column(Date, nullable=False)
+    title = Column(String, nullable=False)
+    category = Column(String, nullable=False)  # work | learning | personal | health | project
+    priority = Column(Integer, nullable=False)  # 1 (low) - 5 (critical)
+    status = Column(String, nullable=False)    # pending | in_progress | completed | cancelled
+    due_date = Column(Date, nullable=False)
+    estimated_hours = Column(Numeric, nullable=False)
 
-    maintenance_events = relationship("MaintenanceEvent", back_populates="equipment")
-    operations = relationship("Operation", back_populates="equipment")
+
+class ScheduleEvent(Base):
+    __tablename__ = "schedule_events"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    category = Column(String, nullable=False)  # work | personal | health | meeting
+    event_date = Column(Date, nullable=False)
+    duration_min = Column(Integer, nullable=False)
+    location = Column(String, nullable=False)
+    status = Column(String, nullable=False)    # scheduled | completed | cancelled
 
 
-class TeamMember(Base):
-    __tablename__ = "team_members"
+class Contact(Base):
+    __tablename__ = "contacts"
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    specialty = Column(String, nullable=False)
-    years_experience = Column(Integer, nullable=False)
+    relationship_type = Column(String, nullable=False)  # colleague | mentor | family | friend | doctor
+    email = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
 
-    maintenance_events = relationship("MaintenanceEvent", back_populates="team_member")
-
-
-class MaintenanceEvent(Base):
-    __tablename__ = "maintenance_events"
-
-    id = Column(Integer, primary_key=True)
-    equipment_id = Column(Integer, ForeignKey("equipment.id"), nullable=False)
-    team_member_id = Column(Integer, ForeignKey("team_members.id"), nullable=False)
-    event_date = Column(Date, nullable=False)
-    component = Column(String, nullable=False)
-    issue = Column(Text, nullable=False)
-    resolution = Column(Text, nullable=False)
-    resolution_hours = Column(Numeric, nullable=False)
-    cost_usd = Column(Numeric, nullable=False)
-
-    equipment = relationship("Equipment", back_populates="maintenance_events")
-    team_member = relationship("TeamMember", back_populates="maintenance_events")
+    expenses = relationship("Expense", back_populates="contact")
 
 
-class Operation(Base):
-    __tablename__ = "operations"
+class Expense(Base):
+    __tablename__ = "expenses"
 
     id = Column(Integer, primary_key=True)
-    equipment_id = Column(Integer, ForeignKey("equipment.id"), nullable=False)
-    operation_date = Column(Date, nullable=False)
-    location = Column(String, nullable=False)
-    threat_level = Column(Integer, nullable=False)  # 1 (routine) - 5 (extinction-level)
-    duration_min = Column(Integer, nullable=False)
-    outcome = Column(String, nullable=False)  # success | partial | aborted
+    contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=True)
+    expense_date = Column(Date, nullable=False)
+    category = Column(String, nullable=False)  # tech | food | travel | learning | utilities
+    amount_usd = Column(Numeric, nullable=False)
+    description = Column(Text, nullable=False)
 
-    equipment = relationship("Equipment", back_populates="operations")
+    contact = relationship("Contact", back_populates="expenses")
 
 
-class IntelReport(Base):
-    __tablename__ = "intel_reports"
+class PersonalNote(Base):
+    __tablename__ = "personal_notes"
 
     id = Column(Integer, primary_key=True)
-    codename = Column(String, unique=True, nullable=False)
-    status = Column(String, nullable=False)  # active | completed | classified
-    threat_level = Column(Integer, nullable=False)
+    title = Column(String, unique=True, nullable=False)
+    category = Column(String, nullable=False)  # idea | goal | reminder | reference
+    priority = Column(Integer, nullable=False)
     summary = Column(Text, nullable=False)
-    report_date = Column(Date, nullable=False)
+    created_date = Column(Date, nullable=False)
+

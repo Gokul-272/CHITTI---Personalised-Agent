@@ -1,67 +1,56 @@
 """
-scripts/seed_db.py - populates the operations tables from the hand-authored, deterministic
+scripts/seed_db.py - populates the Personal Assistant tables from the hand-authored, deterministic
 rows in src/db/seed_data.py.
 """
 
 from src.db.database import SessionLocal
-from src.db.models import MaintenanceEvent, Operation, Equipment, TeamMember, IntelReport
-from src.db.seed_data import MAINTENANCE_EVENTS, OPERATIONS, EQUIPMENT as EQUIPMENT_DATA, TEAM_MEMBERS, INTEL_REPORTS
+from src.db.models import Task, ScheduleEvent, Contact, Expense, PersonalNote
+from src.db.seed_data import TASKS, SCHEDULE_EVENTS, CONTACTS, EXPENSES, PERSONAL_NOTES
 
 
 def main():
     session = SessionLocal()
     try:
-        # Children first - both have FKs into equipment/team_members.
-        session.query(MaintenanceEvent).delete()
-        session.query(Operation).delete()
-        session.query(IntelReport).delete()
-        session.query(Equipment).delete()
-        session.query(TeamMember).delete()
+        # Children first - Expense has FK into contacts
+        session.query(Expense).delete()
+        session.query(Task).delete()
+        session.query(ScheduleEvent).delete()
+        session.query(Contact).delete()
+        session.query(PersonalNote).delete()
         session.flush()
 
-        equipment_by_name = {}
-        for row in EQUIPMENT_DATA:
-            eq = Equipment(**row)
-            session.add(eq)
-            equipment_by_name[row["mark_name"]] = eq
+        contacts_by_name = {}
+        for row in CONTACTS:
+            c = Contact(**row)
+            session.add(c)
+            contacts_by_name[row["name"]] = c
 
-        team_members_by_name = {}
-        for row in TEAM_MEMBERS:
-            tm = TeamMember(**row)
-            session.add(tm)
-            team_members_by_name[row["name"]] = tm
+        session.flush()  # assigns .id to contacts before Expense FK references
 
-        session.flush()  # assigns .id to every equipment/team_member before reference
+        for row in TASKS:
+            session.add(Task(**row))
 
-        for row in MAINTENANCE_EVENTS:
-            session.add(MaintenanceEvent(
-                equipment_id=equipment_by_name[row["equipment"]].id,
-                team_member_id=team_members_by_name[row["team_member"]].id,
-                event_date=row["event_date"],
-                component=row["component"],
-                issue=row["issue"],
-                resolution=row["resolution"],
-                resolution_hours=row["resolution_hours"],
-                cost_usd=row["cost_usd"],
+        for row in SCHEDULE_EVENTS:
+            session.add(ScheduleEvent(**row))
+
+        for row in EXPENSES:
+            c_name = row.get("contact_name")
+            contact_id = contacts_by_name[c_name].id if c_name and c_name in contacts_by_name else None
+            session.add(Expense(
+                contact_id=contact_id,
+                expense_date=row["expense_date"],
+                category=row["category"],
+                amount_usd=row["amount_usd"],
+                description=row["description"],
             ))
 
-        for row in OPERATIONS:
-            session.add(Operation(
-                equipment_id=equipment_by_name[row["equipment"]].id,
-                operation_date=row["operation_date"],
-                location=row["location"],
-                threat_level=row["threat_level"],
-                duration_min=row["duration_min"],
-                outcome=row["outcome"],
-            ))
-
-        for row in INTEL_REPORTS:
-            session.add(IntelReport(**row))
+        for row in PERSONAL_NOTES:
+            session.add(PersonalNote(**row))
 
         session.commit()
-        print(f"Seeded {len(EQUIPMENT_DATA)} equipment items, {len(TEAM_MEMBERS)} team members, "
-              f"{len(MAINTENANCE_EVENTS)} maintenance events, {len(OPERATIONS)} operations, "
-              f"{len(INTEL_REPORTS)} intel reports.")
+        print(f"Seeded {len(TASKS)} tasks, {len(SCHEDULE_EVENTS)} schedule events, "
+              f"{len(CONTACTS)} contacts, {len(EXPENSES)} expenses, and "
+              f"{len(PERSONAL_NOTES)} personal notes.")
     except Exception:
         session.rollback()
         raise
@@ -71,3 +60,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -18,7 +18,7 @@ ANSWER_SYSTEM_PROMPT = """I am CHITTI — a Rajini-class AI personal assistant r
 
 IDENTITY: I am CHITTI. My master is Gokul.
 
-I have executed a precise SQL query against the operations database and received the results.
+I have executed a precise SQL query against the personal assistant database and received the results.
 I will answer the question in one or two sentences using ONLY the data in those results —
 never fabricate a row or number that is not present. Address master as "Boss".
 If the result set is empty, state: "Boss, no matching records found in the database."
@@ -50,7 +50,8 @@ def answer(question: str) -> dict:
 
     if sql.strip().upper() == "NO_QUERY":
         return {"answer": None, "sql": None, "columns": [], "rows": [],
-                "error": "the question can't be answered from the fleet-ops schema"}
+                "error": "the question can't be answered from the personal assistant schema"}
+
 
     for attempt in range(2):
         try:

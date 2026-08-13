@@ -64,7 +64,7 @@ with st.sidebar:
     st.caption("Enthiran-class AI Personal Assistant")
 
     mode = st.radio("Mode", ["RAG", "Agentic"], index=0 if st.session_state.mode == "RAG" else 1,
-                     help="RAG: CHITTI answers from his knowledge base only. Agentic: CHITTI can call tools and query the operations database.")
+                     help="RAG: CHITTI answers from his knowledge base only. Agentic: CHITTI can call tools and query the personal database.")
     if mode != st.session_state.mode:
         st.session_state.mode = mode
 
@@ -88,7 +88,8 @@ with st.sidebar:
         st.caption("Set a valid GROQ_API_KEY or start Ollama and ensure the active model is available.")
 
     postgres_ok = bool(health and health.get("postgres"))
-    st.write(("✅" if postgres_ok else "⚠️") + " Operations DB " + ("connected" if postgres_ok else "not reachable"))
+    st.write(("✅" if postgres_ok else "⚠️") + " Personal DB " + ("connected" if postgres_ok else "not reachable"))
+
     if api_ok and not postgres_ok:
         st.caption("Run `docker compose up -d postgres`, then `python -m scripts.setup_db` and `python -m scripts.seed_db`.")
 

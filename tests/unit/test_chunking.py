@@ -21,34 +21,92 @@ def test_every_ingestion_plan_entry_produces_at_least_one_chunk():
         assert len(chunks) > 0, f"{filename} via {chunk_fn.__name__} produced zero chunks"
 
 
-def test_html_section_chunking_does_not_leak_the_explanatory_comment():
-    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "command_protocols"]
-    assert len(chunks) == 3
+def test_about_me_chunking_keeps_profile_fields_together():
+    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "about_me"]
+    assert len(chunks) == 6
     titles = {meta["title"] for _text, meta in chunks}
-    assert titles == {"Protocol: Red Chip Safety (Enthiran Directive)", "Protocol: Deep Work Lock", "Protocol: Emergency System Backup"}
-    for text, _meta in chunks:
-        assert "Chunking note" not in text
-        assert "<" not in text and ">" not in text
+    assert titles == {
+        "Name / Nickname",
+        "Location / Time Zone",
+        "Languages",
+        "Occupation",
+        "General Background",
+        "What Matters",
+    }
+    combined_text = " ".join(text for text, _meta in chunks)
+    assert "Gokul" in combined_text
+    assert "Coimbatore" in combined_text
+    assert "Tamil" in combined_text
 
 
-def test_markdown_header_chunking_keeps_heading_with_its_body():
-    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "mission_briefings"]
-    assert len(chunks) == 3
-    for text, meta in chunks:
-        assert meta["title"] in text
-        assert "Lessons learned" in text
+def test_coding_profile_chunking_captures_development_preferences():
+    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "coding_profile"]
+    assert len(chunks) == 5
+    combined_text = " ".join(text for text, _meta in chunks)
+    assert "Python" in combined_text
+    assert "FastAPI" in combined_text
+    assert "debug" in combined_text.lower()
 
 
-def test_csv_row_chunking_binds_values_to_column_headers():
-    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "operation_logs"]
-    assert len(chunks) == 4
-    first_text, _meta = chunks[0]
-    assert "Autonomous Mobile Robot 1" in first_text or "CHITTI" in first_text
-    assert "Gokul" in first_text
+def test_education_history_chunking_keeps_education_context_together():
+    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "education_history"]
+    assert len(chunks) == 5
+    combined_text = " ".join(text for text, _meta in chunks)
+    assert "B.E." in combined_text or "Bachelor" in combined_text
+    assert "Coimbatore Institute" in combined_text
 
 
-def test_json_record_chunking_produces_one_chunk_per_array_element():
-    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "personnel_dossiers"]
-    assert len(chunks) == 2
-    names = {meta["name"] for _text, meta in chunks}
-    assert "Gokul" in names or "CHITTI" in names
+def test_work_style_and_goals_docs_are_available_for_broader_question_types():
+    work_style = [c for c in build_all_chunks() if c[1]["doc_type"] == "work_style"]
+    qualities = [c for c in build_all_chunks() if c[1]["doc_type"] == "qualities"]
+    goals = [c for c in build_all_chunks() if c[1]["doc_type"] == "goals"]
+    learning_style = [c for c in build_all_chunks() if c[1]["doc_type"] == "learning_style"]
+    projects = [c for c in build_all_chunks() if c[1]["doc_type"] == "projects_portfolio"]
+
+    assert len(work_style) == 5
+    assert len(qualities) == 4
+    assert len(goals) == 3
+    assert len(learning_style) == 4
+    assert len(projects) == 3
+
+    combined = " ".join(text for text, _meta in work_style + qualities + goals + learning_style + projects)
+    assert "deep work" in combined.lower()
+    assert "discipline" in combined.lower()
+    assert "robotics" in combined.lower()
+    assert "open-source" in combined.lower() or "open source" in combined.lower()
+
+
+def test_preferences_chunking_keeps_recommendation_rules_and_tastes_together():
+    chunks = [c for c in build_all_chunks() if c[1]["doc_type"] == "preferences"]
+    assert len(chunks) == 6
+    titles = {meta["title"] for _text, meta in chunks}
+    assert titles == {
+        "Food Preferences",
+        "Music and Movies",
+        "Technology Preferences",
+        "Recommendation Style",
+        "Things I Dislike",
+        "Decision-Making Preferences",
+    }
+    combined_text = " ".join(text for text, _meta in chunks)
+    assert "biryani" in combined_text.lower()
+    assert "synthwave" in combined_text.lower()
+    assert "concise" in combined_text.lower()
+
+
+def test_relationships_and_memory_ingestion_cover_the_new_personal_schema():
+    important_people = [c for c in build_all_chunks() if c[1]["doc_type"] == "important_people"]
+    assert len(important_people) == 3
+    person_01 = [c for c in build_all_chunks() if c[1]["doc_type"] == "person_01"]
+    person_02 = [c for c in build_all_chunks() if c[1]["doc_type"] == "person_02"]
+    memories = [c for c in build_all_chunks() if c[1]["doc_type"] == "memories"]
+
+    assert len(person_01) == 2
+    assert len(person_02) == 2
+    assert len(memories) == 4
+
+    memory_categories = {meta["category"] for _text, meta in memories}
+    assert memory_categories == {"communication", "learning", "goals", "decision-making"}
+
+    for text, _meta in memories:
+        assert text.strip()

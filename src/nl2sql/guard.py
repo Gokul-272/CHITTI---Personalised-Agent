@@ -4,8 +4,8 @@ src/nl2sql/guard.py - text-level safety checks on LLM-generated SQL.
 This is DEFENSE IN DEPTH, not the actual safety boundary - it's a fast, cheap first line
 of defense that rejects the obvious cases before a query ever reaches the database. The
 real boundary is that src/db/database.readonly_engine connects as a PostgreSQL role
-(chitti_readonly, created by scripts/setup_db.py) with SELECT-only grants on the 4 fleet
-tables - so even a generated statement this guard fails to catch cannot write or drop
+(chitti_readonly, created by scripts/setup_db.py) with SELECT-only grants on the 5 personal
+assistant tables - so even a generated statement this guard fails to catch cannot write or drop
 anything, because the role it runs as has no privilege to.
 """
 
