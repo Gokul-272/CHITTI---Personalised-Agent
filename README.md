@@ -37,7 +37,7 @@ Runs locally or cloud-accelerated — **Groq** (`llama-3.1-8b-instant`) or **Oll
 | **Project Name** | **CHITTI** (Enthiran / Rajini-class AI Personal Assistant Robot v1.0) |
 | **Primary User ("Boss")** | **Gokul** — Robotics Systems Engineer & AI Product Builder |
 | **GitHub Repository** | [Gokul-272/CHITTI---Personalised-Agent](https://github.com/Gokul-272/CHITTI---Personalised-Agent) |
-| **Mission Objective** | Autonomous robotics system monitoring, equipment telemetry checks, mission briefing retrieval, personnel dossier management, maintenance scheduling, and operational fleet intelligence. |
+| **Mission Objective** | Personal AI Assistance. |
 | **Multi-Format Chunking** | Multi-format chunking pipeline: `markdown_header` for `mission_briefings.md`, `json_record` for `personnel_dossiers.json`, `csv_row` for `operation_logs.csv`, and `html_section` for `command_protocols.html`. |
 | **Vector Database** | Embedded **Qdrant** (`./qdrant_data`) with HNSW indexing, Cosine similarity, and `sentence-transformers/all-MiniLM-L6-v2` embeddings (Collection: `chitti_kb`). |
 | **Retrieval Strategy** | `top_k=5` semantic retrieval with rich metadata injection (`doc_type`, `source`, `strategy`) and source-aware context formatting. |
